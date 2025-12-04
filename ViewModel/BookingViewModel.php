@@ -26,6 +26,33 @@ class BookingViewModel {
         $this->fieldsList = $this->db->query("SELECT * FROM fields")->fetchAll(PDO::FETCH_CLASS, 'Field');
     }
 
+    public function getBookingById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM bookings WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchObject('Booking');
+    }
+
+    public function saveBooking($postData) {
+        $booking = DataBinder::bind($postData, new Booking());
+        
+        // Hitung ulang harga berdasarkan lapangan yang dipilih
+        $stmt = $this->db->prepare("SELECT harga_per_jam FROM fields WHERE id = ?");
+        $stmt->execute([$booking->field_id]);
+        $field = $stmt->fetch(PDO::FETCH_OBJ);
+        
+        if ($field) {
+            $total = $field->harga_per_jam * $booking->durasi;
+            
+            if (!empty($booking->id)) { // UPDATE
+                $sql = "UPDATE bookings SET user_id=?, field_id=?, tanggal=?, durasi=?, total_harga=? WHERE id=?";
+                $this->db->prepare($sql)->execute([$booking->user_id, $booking->field_id, $booking->tanggal, $booking->durasi, $total, $booking->id]);
+            } else { // INSERT
+                $sql = "INSERT INTO bookings (user_id, field_id, tanggal, durasi, total_harga) VALUES (?, ?, ?, ?, ?)";
+                $this->db->prepare($sql)->execute([$booking->user_id, $booking->field_id, $booking->tanggal, $booking->durasi, $total]);
+            }
+        }
+    }
+
     public function createBooking($postData) {
         $booking = DataBinder::bind($postData, new Booking());
         // Hitung harga

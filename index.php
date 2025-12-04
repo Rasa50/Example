@@ -81,30 +81,26 @@ switch ($page) {
     // --- HALAMAN BOOKINGS (TRANSAKSI) ---
     case 'bookings':
         $bookingVM = new BookingViewModel();
+        $bookingToEdit = null;
 
         // Handle Action
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action == 'save') {
-            $bookingVM->createBooking($_POST);
+            $bookingVM->saveBooking($_POST); // Ganti createBooking jadi saveBooking
             header("Location: index.php?page=bookings"); exit;
         } elseif ($action == 'delete') {
             $bookingVM->deleteBooking($_GET['id']);
             header("Location: index.php?page=bookings"); exit;
+        } elseif ($action == 'edit') {
+            $bookingToEdit = $bookingVM->getBookingById($_GET['id']);
         }
 
-        // Load Data
         $bookingVM->loadData();
 
-        // Tampilkan View
         echo '<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-700">Booking Lapangan</h2></div>';
         echo '<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">';
         
-        // Include file View (BookingForm kamu pakai .php, bukan .html)
-        if (file_exists('View/Booking View/BookingForm.php')) {
-            include 'View/Booking View/BookingForm.php';
-        }
-        if (file_exists('View/Booking View/BookingList.php')) {
-            include 'View/Booking View/BookingList.php';
-        }
+        if (file_exists('View/Booking View/BookingForm.php')) include 'View/Booking View/BookingForm.php';
+        if (file_exists('View/Booking View/BookingList.php')) include 'View/Booking View/BookingList.php';
         
         echo '</div>';
         break;
@@ -112,20 +108,29 @@ switch ($page) {
     // --- HALAMAN REVIEWS ---
     case 'reviews':
         $reviewVM = new ReviewViewModel();
+        $reviewToEdit = null;
 
-        // Handle Action
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action == 'save') {
             $reviewVM->saveReview($_POST);
-            header("Location: index.php?page=reviews"); exit; // Redirect ke list review
+            header("Location: index.php?page=reviews"); exit;
+        } elseif ($action == 'delete') {
+            $reviewVM->deleteReview($_GET['id']);
+            header("Location: index.php?page=reviews"); exit;
         } elseif ($action == 'create') {
-            // Tampilkan Form Review
+            // Mode Buat Baru (dari halaman booking)
             echo '<div class="flex justify-center mt-10">';
             include 'View/Review View/ReviewForm.php';
             echo '</div>';
-            break; // Stop di sini agar tidak load list di bawahnya
+            return; 
+        } elseif ($action == 'edit') {
+            // Mode Edit
+            $reviewToEdit = $reviewVM->getReviewById($_GET['id']);
+            echo '<div class="flex justify-center mt-10">';
+            include 'View/Review View/ReviewForm.php';
+            echo '</div>';
+            return;
         }
 
-        // Load & Tampilkan List Review
         $reviewVM->loadReviews();
         echo '<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-700">Ulasan Member</h2></div>';
         include 'View/Review View/ReviewList.php';
@@ -134,41 +139,27 @@ switch ($page) {
     // --- HALAMAN USERS (MEMBER) ---
     case 'users':
         $userVM = new UserViewModel();
+        $userToEdit = null;
 
-        // Handle Action
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action == 'save') {
-            $userVM->addUser($_POST);
+            $userVM->saveUser($_POST); // Ganti addUser jadi saveUser
             header("Location: index.php?page=users"); exit;
         } elseif ($action == 'delete') {
             $userVM->deleteUser($_GET['id']);
             header("Location: index.php?page=users"); exit;
+        } elseif ($action == 'edit') {
+            $userToEdit = $userVM->getUserById($_GET['id']);
         }
 
-        // Load Data
         $userVM->loadUsers();
 
-        // Tampilkan View
         echo '<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-700">Data Member</h2></div>';
+        echo '<div class="grid grid-cols-1 md:grid-cols-3 gap-8">';
         
-        // WARNING: File ini belum ada di upload kamu. 
-        // Pastikan kamu membuat folder "User View" di dalam "View" 
-        // dan membuat file "UserForm.php" serta "UserList.php".
-        $userFormPath = 'View/User View/UserForm.php';
-        $userListPath = 'View/User View/UserList.php';
+        if (file_exists('View/User View/UserForm.php')) include 'View/User View/UserForm.php';
+        if (file_exists('View/User View/UserList.php')) include 'View/User View/UserList.php';
 
-        if (file_exists($userFormPath) && file_exists($userListPath)) {
-            echo '<div class="grid grid-cols-1 md:grid-cols-3 gap-8">';
-            include $userFormPath;
-            include $userListPath;
-            echo '</div>';
-        } else {
-            // Pesan Error jika file belum dibuat
-            echo '<div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 w-full" role="alert">
-                    <p class="font-bold">File View Tidak Ditemukan</p>
-                    <p>Sistem mencari file di: <code>View/User View/UserForm.php</code> & <code>UserList.php</code>.</p>
-                    <p>Silakan buat filenya terlebih dahulu.</p>
-                  </div>';
-        }
+        echo '</div>';
         break;
 
     // --- HALAMAN DEFAULT (404) ---

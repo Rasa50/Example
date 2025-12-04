@@ -15,7 +15,8 @@
                 <td class="px-5 py-5 text-sm"><?= $u->email ?></td>
                 <td class="px-5 py-5 text-sm"><span class="bg-gray-200 px-2 py-1 rounded text-xs"><?= $u->role ?></span></td>
                 <td class="px-5 py-5 text-sm">
-                    <a href="index.php?page=users&action=delete&id=<?= $u->id ?>" class="text-red-600 hover:text-red-900" onclick="return confirm('Hapus member ini?')">Hapus</a>
+                    <a href="index.php?page=users&action=edit&id=<?= $u->id ?>" class="text-indigo-600 font-bold mr-2">Edit</a>
+                    <a href="index.php?page=users&action=delete&id=<?= $u->id ?>" class="text-red-600" onclick="return confirm('Hapus member ini?')">Hapus</a>
                 </td>
             </tr>
             <?php endforeach; ?>

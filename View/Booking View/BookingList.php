@@ -18,11 +18,10 @@
                 <td class="px-5 py-4 text-sm"><?= $b->tanggal ?></td>
                 <td class="px-5 py-4 text-sm"><?= $b->durasi ?> Jam</td>
                 <td class="px-5 py-4 text-sm font-bold text-green-600">Rp <?= number_format($b->total_harga) ?></td>
-                <td class="px-5 py-4 text-sm">
-                    <a href="index.php?page=bookings&action=delete&id=<?= $b->id ?>" class="text-red-500 mr-3"><i class="fas fa-trash"></i></a>
-                    <a href="index.php?page=reviews&action=create&booking_id=<?= $b->id ?>" class="text-yellow-500 hover:text-yellow-600" title="Beri Review">
-                        <i class="fas fa-star"></i>
-                    </a>
+                <td class="px-5 py-4 text-sm flex items-center">
+                    <a href="index.php?page=bookings&action=edit&id=<?= $b->id ?>" class="text-indigo-600 mr-3" title="Edit"><i class="fas fa-edit"></i></a>
+                    <a href="index.php?page=bookings&action=delete&id=<?= $b->id ?>" class="text-red-500 mr-3" onclick="return confirm('Hapus?')"><i class="fas fa-trash"></i></a>
+                    <a href="index.php?page=reviews&action=create&booking_id=<?= $b->id ?>" class="text-yellow-500" title="Review"><i class="fas fa-star"></i></a>
                 </td>
             </tr>
             <?php endforeach; ?>

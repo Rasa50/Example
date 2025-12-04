@@ -23,13 +23,24 @@ class ReviewViewModel {
         $stmt = $this->db->query($sql);
         $this->reviews = $stmt->fetchAll(PDO::FETCH_CLASS, 'Review');
     }
+    
+    public function getReviewById($id) {
+    $stmt = $this->db->prepare("SELECT * FROM reviews WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetchObject('Review');
+    }
 
     public function saveReview($postData) {
         $review = DataBinder::bind($postData, new Review());
-        $stmt = $this->db->prepare("INSERT INTO reviews (booking_id, rating, komentar) VALUES (?, ?, ?)");
-        $stmt->execute([$review->booking_id, $review->rating, $review->komentar]);
+        if (!empty($review->id)) { // UPDATE
+            $stmt = $this->db->prepare("UPDATE reviews SET rating=?, komentar=? WHERE id=?");
+            $stmt->execute([$review->rating, $review->komentar, $review->id]);
+        } else { // INSERT
+            $stmt = $this->db->prepare("INSERT INTO reviews (booking_id, rating, komentar) VALUES (?, ?, ?)");
+            $stmt->execute([$review->booking_id, $review->rating, $review->komentar]);
+        }
     }
-    
+
     public function deleteReview($id) {
         $this->db->prepare("DELETE FROM reviews WHERE id=?")->execute([$id]);
     }
