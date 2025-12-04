@@ -15,6 +15,7 @@
                 <td class="px-5 py-5 text-sm"><?= $f->jenis ?></td>
                 <td class="px-5 py-5 text-sm">Rp <?= number_format($f->harga_per_jam) ?></td>
                 <td class="px-5 py-5 text-sm">
+                    <a href="index.php?page=fields&action=edit&id=<?= $f->id ?>" class="text-indigo-600 hover:text-indigo-900 mr-3 font-bold">Edit</a>
                     <a href="index.php?page=fields&action=delete&id=<?= $f->id ?>" class="text-red-600" onclick="return confirm('Hapus?')">Hapus</a>
                 </td>
             </tr>

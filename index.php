@@ -9,6 +9,7 @@ require_once 'config/Database.php';
 require_once 'ViewModel/FieldViewModel.php';
 require_once 'ViewModel/UserViewModel.php';
 require_once 'ViewModel/BookingViewModel.php';
+require_once 'ViewModel/ReviewViewModel.php';
 
 // ==========================================
 // 2. ROUTING LOGIC
@@ -28,38 +29,52 @@ include 'View/Templates/Header.html';
 switch ($page) {
 
     // --- HALAMAN HOME ---
+    // --- HALAMAN HOME ---
     case 'home':
+        // 1. Instansiasi ViewModel
+        $userVM = new UserViewModel();
+        $fieldVM = new FieldViewModel();
+        $bookingVM = new BookingViewModel();
+
+        // 2. Load Data dari Database
+        $userVM->loadUsers();
+        $fieldVM->loadFields();
+        $bookingVM->loadData();
+
+        // 3. Tampilkan View
         include 'View/Home View/HomeView.html';
         break;
 
     // --- HALAMAN LAPANGAN (FIELDS) ---
     case 'fields':
         $fieldVM = new FieldViewModel();
-        
-        // Handle Action (Simpan/Hapus)
+        $fieldToEdit = null; // Variabel penampung data edit
+
+        // Handle Action
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action == 'save') {
             $fieldVM->saveField($_POST);
             header("Location: index.php?page=fields"); exit;
         } elseif ($action == 'delete') {
             $fieldVM->deleteField($_GET['id']);
             header("Location: index.php?page=fields"); exit;
+        } elseif ($action == 'edit') {
+            // Ambil data berdasarkan ID untuk diedit
+            $fieldToEdit = $fieldVM->getFieldById($_GET['id']);
         }
 
-        // Load Data
         $fieldVM->loadFields();
 
         // Tampilkan View
         echo '<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-700">Manajemen Lapangan</h2></div>';
         echo '<div class="grid grid-cols-1 md:grid-cols-3 gap-8">';
         
-        // Include file View sesuai nama yang kamu upload
-        if (file_exists('View/Field View/FieldForm.html')) {
-            include 'View/Field View/FieldForm.html';
+        // PENTING: Ubah include ini memanggil file PHP agar bisa baca variabel
+        if (file_exists('View/Field View/FieldForm.php')) {
+            include 'View/Field View/FieldForm.php';
         }
         if (file_exists('View/Field View/FieldList.php')) {
             include 'View/Field View/FieldList.php';
         }
-        
         echo '</div>';
         break;
 
@@ -92,6 +107,28 @@ switch ($page) {
         }
         
         echo '</div>';
+        break;
+
+    // --- HALAMAN REVIEWS ---
+    case 'reviews':
+        $reviewVM = new ReviewViewModel();
+
+        // Handle Action
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $action == 'save') {
+            $reviewVM->saveReview($_POST);
+            header("Location: index.php?page=reviews"); exit; // Redirect ke list review
+        } elseif ($action == 'create') {
+            // Tampilkan Form Review
+            echo '<div class="flex justify-center mt-10">';
+            include 'View/Review View/ReviewForm.php';
+            echo '</div>';
+            break; // Stop di sini agar tidak load list di bawahnya
+        }
+
+        // Load & Tampilkan List Review
+        $reviewVM->loadReviews();
+        echo '<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-700">Ulasan Member</h2></div>';
+        include 'View/Review View/ReviewList.php';
         break;
 
     // --- HALAMAN USERS (MEMBER) ---

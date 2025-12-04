@@ -9,10 +9,16 @@ class FieldViewModel {
     public function __construct() {
         $this->db = Database::getInstance();
     }
-
+    
     public function loadFields() {
         $stmt = $this->db->query("SELECT * FROM fields");
         $this->fields = $stmt->fetchAll(PDO::FETCH_CLASS, 'Field');
+    }
+    
+    public function getFieldById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM fields WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchObject('Field');
     }
 
     public function saveField($postData) {

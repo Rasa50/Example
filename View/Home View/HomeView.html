@@ -3,18 +3,72 @@
   <p class="text-gray-600 mb-8">
     Sistem Manajemen Penyewaan Lapangan Olahraga Terpadu
   </p>
+
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
-      <i class="fas fa-users text-4xl text-indigo-500 mb-4"></i>
-      <h3 class="text-xl font-bold">Manajemen Member</h3>
+    <div
+      class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500 hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <i class="fas fa-users text-4xl text-indigo-500 mb-4"></i>
+          <h3 class="text-xl font-bold text-gray-700">Total Member</h3>
+        </div>
+        <div class="text-right">
+          <span class="text-4xl font-bold text-indigo-600">
+            <?= count($userVM->users) ?>
+          </span>
+          <p class="text-sm text-gray-500">Orang</p>
+        </div>
+      </div>
+      <a
+        href="index.php?page=users"
+        class="text-indigo-500 text-sm mt-4 inline-block hover:underline"
+        >Lihat Detail &rarr;</a
+      >
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
-      <i class="fas fa-grass text-4xl text-green-500 mb-4"></i>
-      <h3 class="text-xl font-bold">Daftar Lapangan</h3>
+
+    <div
+      class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <i class="fas fa-futbol text-4xl text-green-500 mb-4"></i>
+          <h3 class="text-xl font-bold text-gray-700">Total Lapangan</h3>
+        </div>
+        <div class="text-right">
+          <span class="text-4xl font-bold text-green-600">
+            <?= count($fieldVM->fields) ?>
+          </span>
+          <p class="text-sm text-gray-500">Unit</p>
+        </div>
+      </div>
+      <a
+        href="index.php?page=fields"
+        class="text-green-500 text-sm mt-4 inline-block hover:underline"
+        >Lihat Detail &rarr;</a
+      >
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-red-500">
-      <i class="fas fa-calendar-check text-4xl text-red-500 mb-4"></i>
-      <h3 class="text-xl font-bold">Booking Real-time</h3>
+
+    <div
+      class="bg-white p-6 rounded-lg shadow-md border-t-4 border-red-500 hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <i class="fas fa-calendar-check text-4xl text-red-500 mb-4"></i>
+          <h3 class="text-xl font-bold text-gray-700">Total Booking</h3>
+        </div>
+        <div class="text-right">
+          <span class="text-4xl font-bold text-red-600">
+            <?= count($bookingVM->bookings) ?>
+          </span>
+          <p class="text-sm text-gray-500">Transaksi</p>
+        </div>
+      </div>
+      <a
+        href="index.php?page=bookings"
+        class="text-red-500 text-sm mt-4 inline-block hover:underline"
+        >Lihat Detail &rarr;</a
+      >
     </div>
   </div>
 </div>
