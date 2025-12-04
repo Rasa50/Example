@@ -1,6 +1,6 @@
 <?php
-require_once 'models/Booking.php';
-require_once 'viewmodels/DataBinder.php';
+require_once 'Model/Booking.php';
+require_once 'ViewModel/DataBinder.php';
 
 class BookingViewModel {
     private $db;

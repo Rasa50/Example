@@ -1,6 +1,6 @@
 <?php
-require_once 'models/User.php';
-require_once 'viewmodels/DataBinder.php';
+require_once 'Model/User.php';
+require_once 'ViewModel/DataBinder.php';
 
 class UserViewModel {
     private $db;

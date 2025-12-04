@@ -54,6 +54,14 @@ class Database {
             FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
             FOREIGN KEY(field_id) REFERENCES fields(id) ON DELETE CASCADE
         ) ENGINE=InnoDB");
+
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS reviews (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            booking_id INT,
+            rating INT,
+            komentar TEXT,
+            FOREIGN KEY(booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB");
     }
 }
 ?>

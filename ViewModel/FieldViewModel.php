@@ -1,6 +1,6 @@
 <?php
-require_once 'models/Field.php';
-require_once 'viewmodels/DataBinder.php';
+require_once 'Model/Field.php';
+require_once 'ViewModel/DataBinder.php';
 
 class FieldViewModel {
     private $db;
